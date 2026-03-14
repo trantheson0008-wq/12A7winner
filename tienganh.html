@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English Midterm - Exam Mode</title>
+    <style>
+    
+
+/* Đảm bảo container chính luôn đẹp */
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+}
+        :root { --primary: #3b82f6; --success: #22c55e; --error: #ef4444; --bg: #f8fafc; }
+        body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
+        .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; }
+        .timer { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
+        .score { font-size: 1.1rem; font-weight: 600; color: #64748b; }
+        .passage-box { background: #f1f5f9; border-left: 5px solid var(--primary); padding: 20px; border-radius: 8px; margin-bottom: 20px; line-height: 1.8; }
+        .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .opt-btn { padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; background: white; cursor: pointer; transition: 0.2s; text-align: left; font-size: 1rem; }
+        .opt-btn:hover { border-color: var(--primary); background: #f0f7ff; }
+        .correct { background: var(--success) !important; color: white; border-color: var(--success); }
+        .wrong { background: var(--error) !important; color: white; border-color: var(--error); }
+
+        .category-tag { background: #dbeafe; color: #1e40af; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; text-transform: uppercase; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    
+    <div id="quiz-area"></div>
+    
+    <div class="controls">
+        <button onclick="prevQuestion()">Câu trước</button>
+        <button onclick="nextQuestion()">Câu sau</button>
+    </div>
+</div>
+<div class="container">
+    <div class="header">
+        <div>
+            <span class="category-tag" id="category">Loading...</span>
+            <div class="score">Điểm: <span id="current-score">0</span> | Câu: <span id="q-progress">0/0</span></div>
+        </div>
+        <div class="timer">⏱ <span id="time-display">00:00</span></div>
+    </div>
+
+    <div id="quiz-area">
+        <div id="passage-container" class="passage-box"></div>
+        <h3 id="question-text"></h3>
+        <div id="options-area" class="option-grid"></div>
+    </div>
+
+    <div id="result-screen" class="hidden" style="text-align: center;">
+        <h1 style="font-size: 3rem;">🎉</h1>
+        <h2>Hoàn thành bài ôn tập!</h2>
+        <p id="final-stats"></p>
+        <button onclick="location.reload()" style="padding: 12px 25px; cursor: pointer; background: var(--primary); color: white; border: none; border-radius: 5px;">Làm lại bài mới</button>
+    </div>
+</div>
+
+<script>
+ 
+
+    const database = [
+    {
+        type: "Advertisement Cloze",
+        passage: "This weeks dance (1) _______. We are sorry to everyone that has been looking forward to it. It was supposed to be on Friday night, but we were notified that because of circumstances beyond their control, the band can’t play that day. After the bands cancellation, we tried (2) _______ a DJ but it was too late. All of the local DJs were playing somewhere else. Don’t worry-we are rescheduling for next Friday, June 20. This time we will have DJ Morry Morris. For those of you who have already bought tickets, you may use them (3)_______ the dance on the rescheduled date. If you want a refund, you can bring your ticket to the student council office next week. Again, we are sorry and thank you for your understanding. ",
+        questions: [
+            { q: "Choose the best fit for blank (1):", options: ["has been cancelled", "has cancel", "cancelled", "cancels"], ans: "has been cancelled" },
+            { q: "Choose the best fit for blank (2):", options: ["got", "get", "getting", "to get"], ans: "to get" },
+            { q: "Choose the best fit for blank (3):", options: ["enter", "to enter", "entering", "enters"], ans: "to enter" }
+        ]
+    },
+      {
+        type: "Advertisement Cloze",
+        passage: "RADIO PROGRAMMES WE RECOMMEND THIS WEEK A BEFORE OUR TIME This Saturday's programme discusses the very latest CD releases, so there will be a great mix of music from all over the world. This week's special report comes from Senegal. On Saturday, this weekly programme includes the first part of a documentary series (4)_______ the discovery of the site of a 15th-century village. Professor John Frost and his team will talk about what life was like for the villagers. This Wednesday, a local team tries to prove that people lived in the rocky hills of their area thousands of years ago. Specialist presenter Dr Clive Sparky describes what they find. Listeners can ring in and ask him questions, and discuss their own (5) _______ and local discoveries. This is a perfect programme for lovers of new plays, music and poetry. On Saturday, listeners have the chance (6)_______ the prize- winning play 'Machines'. Poet Roger Brookes will also read from his new collection 'Rainbow' and composer Jack Williams will play his latest piece for classical guitar. ",
+        questions: [
+            { q: "Choose the best fit for blank (4):", options: ["at", "on", "in", "about"], ans: "about" },
+            { q: "Choose the best fit for blank (5):", options: ["interest", "interests", "interesting", "interested"], ans: "interests" },
+            { q: "Choose the best fit for blank (6):", options: ["to hear", "hear", "hearing", "heard"], ans: "to hear" }
+        ]
+    },
+      {
+        type: "Advertisement Cloze",
+        passage: "Upgrade Your Life with Smart Home Solutions Transform your home into a smart living space with our Smart Home Solutions! Our (7) _______ systems combine the perfect blend of technology and comfort, giving you complete control over your environment. Our devices, (8) _______ smart lights and thermostats, are connected through a central hub, which allows you to manage everything with just a tap on your phone. Control your home by using your voice, even when your miles away, and enjoy the convenience of automation. We also offer eco-friendly solutions to reduce energy consumption. Smart plugs and appliances that are switched off automatically save electricity and lower your bills. With our easy-to-install systems, you’ll be able to (9) _______ decisions about your energy use and enjoy a more efficient lifestyle. Join the smart home revolution today, and reap the benefits of technology tailored to your needs. Make your home smarter, greener, and more connected!",
+        questions: [
+            { q: "Choose the best fit for blank (7):", options: ["innovative", "innovation", "innovate", "innovatively"], ans: "innovative" },
+            { q: "Choose the best fit for blank (8):", options: ["include", "to include", " including", "As"], ans: "include" },
+            { q: "Choose the best fit for blank (9):", options: ["do", "make", "get", "take"], ans: "make" }
+        ]
+    },
+      {
+        type: "Advertisement Cloze",
+        passage: "Join the Robot Design Contest!* Design (10) _______ robot with innovative features. * Showcase creativity in functionality and aesthetics. * Emphasise how your robot will (11) _______ with users and its environment. Submit your designs by March 30. Prizes await (12) _______ visionary creations! Don't miss out on this opportunity to shape the future of robotics!",
+        questions: [
+            { q: "Choose the best fit for blank (10):", options: ["an", "the", "a", "Ø (no article)"], ans: "a" },
+            { q: "Choose the best fit for blank (11):", options: ["interaction", "interact", "interactive", "interactively"], ans: "interact" },
+            { q: "Choose the best fit for blank (12):", options: ["more than", "the most", "the more", "the more than"], ans: "the more" }
+        ]
+    },
+      {
+        type: "Advertisement Cloze",
+          passage: "CONGRATULATIONS!* Let's have a big round of applause for Jane Doe, who has once again won our Manager of the Year award. * Jane's insistence (13) _______ remaining a step ahead of the managerial trends marks her as (14) _______ example to us all. * In addition to a handsome cash bonus to show our (15) _______, Jane will fly first class on all her business travels next year. Congratulations, Jane!",
+         questions: [
+            { q: "Choose the best fit for blank (13):", options: ["upon", "into", "to", "about"], ans: "upon" },
+            { q: "Choose the best fit for blank (14):", options: ["the", "an", "a", "Ø"], ans: "an" },
+            { q: "Choose the best fit for blank (15):", options: ["appreciate", "appreciation", "appreciative", "appreciable"], ans: "appreciation" }
+        ]
+    },
+      {
+        type: "Advertisement Cloze",
+        passage: "NEW FINANCIAL COMPUTER PROGRAM The board of managers would like to announce: * All bookkeepers and area managers (16) _______ to attend a meeting on Wednesday, July 8, at 11:00 a. m. * We will be giving information on the new financial computer program that will be installed by the end of the month. * Training on computers will take place next week and those who work with area budgets must (17) _______ this introductory meeting. * (18) _______ you have any questions, please contact your technical department. ",
+        questions: [
+            { q: "Choose the best fit for blank (16):", options: ["are required", "requiring", "required", "are required"], ans: "are required" },
+            { q: "Choose the best fit for blank (17):", options: ["attend", "attract", "attach", "participate"], ans: "attend" },
+            { q: "Choose the best fit for blank (18):", options: ["Had", "Were", "Should", "Will"], ans: "Should" }
+        ]
+    },
+        // Dạng 2: Sắp xếp hội thoại (Ảnh 2)
+        {
+            type: "Conversation Arrangement",
+            passage: "a. Alex: That's awesome!...<br>b. Alex: I'm so excited about the community clean-up...<br>c. Emma: Yes, I signed up last week!...",
+            questions: [
+                { q: "What is the best arrangement for this exchange?", options: ["c-a-b", "b-c-a", "c-b-a", "a-c-b"], ans: "b-c-a" }
+            ]
+        },
+         {
+            type: "Conversation Arrangement",
+            passage: "a. Peter: I'd like to work in hotel management.<br> b. Peter: Well, I don't mind working at weekends or working long hours. In addition, I can get paid well <br>c. Lucy: Really? Why?<br>",
+            questions: [
+                { q: "What is the best arrangement for this exchange?", options: ["a-c-b", "b-a-c", "c-b-a", "a-b-c"], ans: "a-c-b" }
+            ]
+        },
+         {
+            type: "Conversation Arrangement",
+            passage: "a. Sarah: I’m planning to start my own business one day. I’ve always wanted to be an entrepreneur. <br>b. Sarah: I’m interested in opening a coffee shop with a unique concept. I’ve already started researching it. <br>c. Alex: That’s a great idea! What kind of business are you thinking about?<br>",
+            questions: [
+                { q: "What is the best arrangement for this exchange?", options: ["c-a-b", "b-c-a", "a-c-b", "a-b-c"], ans: "a-c-b" }
+            ]
+        },
+         {
+            type: "Conversation Arrangement",
+            passage: "a. John: I’m planning to visit Japan next summer. b. Mary: Why Japan?<br>c. Mary: Have you already decided on the places you want to visit?<br>d. John: I’ve always been fascinated by Japanese culture and history. <br>e. Mary: That sounds amazing! I hope you enjoy the trip. <br>",
+            questions: [
+                { q: "What is the best arrangement for this exchange?", options: ["c-a-b-d-e", "a-b-d-c-e", "b-a-e-d-c", "c-a-d-b-e"], ans: "c-a-b-d-e" }
+            ]
+        },
+         {
+            type: "Conversation Arrangement",
+            passage: "a. Mark: Which country are you considering?b. Jenna: I’m thinking about Spain because of its rich history and vibrant lifestyle. <br>c. Mark: That sounds exciting!<br>d. Mark: What made you decide to study abroad?<br>e. Jenna: I want to experience a different culture and learn a new language. <br>",
+            questions: [
+                { q: "What is the best arrangement for this exchange?", options: ["c-b-a-e-d", "c-e-d-b-a", "d-b-a-e-c", "d-e-a-b-c"], ans: "d-e-a-b-c" }
+            ]
+        },
+         {
+            type: "Conversation Arrangement",
+            passage: "a. Susan: Good morning. What are you doing for a living now?b. Peter: I decided to become an English teacher because the opportunity crossed my path during my final year of study at University. Moreover, English language teaching is a career that encourages creativity. <br>c. Peter: Good morning. Now, I am an English teacher. <br>d. Susan: Wonderful. Why did you decide to become an English teacher? <br>e. Susan: It sounds great. Being a teacher is a precious job. <br>",
+            questions: [
+                { q: "What is the best arrangement for this exchange?", options: ["c-b-a-e-d", "c-e-d-b-a", "d-b-a-e-c", "a-c-d-b-e"], ans: "a-c-d-b-e" }
+            ]
+        },
+
+        // Dạng 3: Đọc hiểu AI (Ảnh 3)
+        {
+            type: "Reading Comprehension",
+            passage: "In the near term, the goal of keeping AI's impact on society beneficial motivates research in many areas, from economics and law to technical topics such as verification, validity, security and control. Whereas it may be little more than a minor nuisance if your laptop crashes or gets hacked, it becomes all the more important that an AI system does what you want it to do if it controls your car, your airplane, your pacemaker, your automated trading system or your power grid. Another short-term challenge is preventing a devastating arms race in lethal autonomous weapons. <br> In the long term, an important question is what will happen if the quest for strong AI succeeds and an AI system becomes better than humans at all cognitive tasks. Such a system could potentially undergo recursive self-improvement, triggering an intelligence explosion leaving human intellect far behind. By inventing revolutionary new technologies, such a super-intelligence might help us eradicate war, disease, and poverty, and so the creation of strong AI might be the biggest event in human history. Some experts have expressed concern, though, that it might also be the last, unless we learn to align the goals of the AI with ours before it becomes super-intelligent. <br> There are some who question whether strong AI will ever be achieved, and others who insist that the creation of super-intelligent AI is guaranteed to be beneficial. At FLI we recognize both of these possibilities, but also recognize the potential for an artificial intelligence system to intentionally or unintentionally cause great harm. We believe research today will help us better prepare for and prevent such potentially negative consequences in the future, thus enjoying the benefits of AI while avoiding pitfalls. <br>",
+            questions: [
+                { q: "Question 25: Which best serves as the title for the passage?", options: ["Transcending complacency on super-intelligent machines. ", "No time like the present for AI safety work", "The importance of researching AI safety", "Challenges to ensuring the safety of AI systems"], ans: "The importance of researching AI safety" }
+                ,
+                { q: "Question 26: According to paragraph 1, what is NOT mentioned as a potential benefit of AI?", options: ["Facilitating the identification system", "Managing the electricity in homes", "Controlling vehicles and gadgets", "Curing life-threatening diseases"], ans: "Curing life-threatening diseases" }
+                ,
+                { q: "The word “recursive” in paragraph 2 is closest in meaning to ______. ", options: ["powerful", "repeated", "impossible", "monotonous "], ans: "repeated" }
+                ,
+                { q: "Question 28: The word “it” in paragraph 2 refers to ", options: ["event", "human", "history", "poverty"], ans: "event" }
+                ,
+                { q: "Question 29: According to paragraph 3, which information is incorrect about the future of AI?", options: ["We cannot deny the likelihood of AI turning on its creator-the human", "The emergence of super-intelligence will yield valuable benefits for human", "One of the focus of AI system nowadays should be preparation and preventive measures", "The probability of malicious artificial intelligence is an unexpected zero"], ans: "The probability of malicious artificial intelligence is an unexpected zero" }
+                ,
+            ]
+            },
+             
+         {
+            type: "Reading Comprehension",
+            passage: "The Singapore Science Centre is located on a six-hectare site in Jurong. At the centre, we can discover the wonders of science and technology in a fun way. Clap your hands and colorful bulbs will light up. Start a wheel spinning and it will set off a fan churning. It is a place to answer our curiosity and capture our imagination. <br>The centre features over four hundred exhibits covering topics like solar radiation, communication, electronics, mathematics, nuclear energy, and evolution. It aims to arouse interest in science and technology among us and the general public. The centre is the first science one to be established in Southeast Asia. It was opened in 1977 and it now receives an average of one thousand two hundred visitors a day. The exhibits can be found in four exhibition galleries. They are the Lobby, Physical Sciences, Life Sciences and Aviation. These exhibits are renovated annually so as to encourage visitors to make return visits to the centre.<br>Instead of the usual “Hands off’ notices found in exhibition halls, visitors are invited to touch and feel the exhibits, push the buttons, turn the cranks or pedals. This is an interesting way to learn science even if you hate the subject. A Discovery Centre was built for children between the ages of three and twelve. This new exhibition gallery was completed in 1985. Lately this year a stone-age exhibit was built. It shows us about the animals and people which were extinct. <br> ",
+            questions: [
+                { q: "Question 30: What can be the best title of the passage?", options: ["Singapore Science Centre", "Physical Sciences", "Science Centre", "Discovery Centre"], ans: "Singapore Science Centre" }
+               , 
+             { q: "Question 31: The word “It” in paragraph 2 refers to", options: ["solar radiation", "the general public", "the centre", "evolution"], ans: "the centre" }
+             ,
+             { q: "Question 32: According to the paragraph 2, which of the following is NOT true about the Singapore Science Centre?", options: ["The centre was not opened until 1977", "Visitors are encouraged to return to the centre", "The centre is the first one established in the world", "The exhibits in the centre cover a wide range of topics"], ans: "The centre is the first one established in the world" }
+             ,
+             { q: "Question 33: What does “renovated” in paragraph 2 means?", options: ["upgraded", "changed", "painted", "shown"], ans: "upgraded" }
+             ,
+             { q: "Question 34: The author mentions all of the following in the passage EXCEPT", options: ["The centre is located in Jurong", "There are four exhibition galleries in the centre", "The centre is the biggest in Asia", "The exhibits are renewed every year"], ans: "The centre is the biggest in Asia" }
+             ,
+            ]
+        },
+         {
+            type: "Reading Comprehension",
+            passage: "The next time you're out in a public place, like a park or a restaurant, look around you. What is happening? Some people are surfing the internet on their phones. Others are wearing headphones, listening to music on their MP3 players. That's just the way life is today. We all spend a fair amount of our time connected to technology.<br>Now imagine living in a world without smartphones, tablets or any of the electronic gadgets we take for granted these days. There's no internet and you go to the library and look at a book when you want to find anything out. You play outside with friends in the real world instead of playing online video games in virtual worlds. There are no texts, no DVDs and no email. Welcome to 1986!<br>That's the world the McMillan family from Ontario, Canada, decided to live in for a year. Blair, 27, Morgan, 28, and their two sons Trey and Denton, aged five and three, got rid of their cable TV, smartphones, internet, new games console, digital camera, DVD player, and instead used an old TV, a radio, old telephones, a VHS video player, an old games console and maps. They decided to try it after seeing how their young children were becoming dependent on technology. They aren't alone. More and more parents today worry about the effect technology is having on their children, particularly very young children. <br>The McMillans decided to get back to basics to see how things have changed. So how did they find their year without modem technology? ‘I thought Blair was mad when he suggested doing this whole thing,’ says Morgan, but it's made me realise how much time we wasted. We seem much more relaxed now, not checking in on email or Facebook all the time. ’ The McMillans are now back in the present with a different attitude to today's technology. Blair said, ‘I'm not anti-technology. I wanted to taste, and I wanted my kids to taste what it would be like without it, and to see if we could actually do it. ”<br>",
+            questions: [
+                { q: "Question 35: Which best serves as the title for the passage?", options: ["A Year without Technology", "The Fresh Era of New Technology", "A Day of Living without Your Phone", "Technology in Times of Change"], ans: "A Year without Technology" }
+                ,
+             { q: "Question 36: According to paragraph 1, people nowadays _______. ", options: ["tend to stroll around public parks frequently", "are only keen on reading news on the Internet", "lead an easier life", "are addicted to using technology"], ans: "are addicted to using technology" }
+             ,
+             { q: "Question 37: The word ‘fair’ in paragraph 1 mostly means _______.", options: ["limited", "equal", "pretty small", "quite large"], ans: "quite large" }
+             ,
+             { q: "Which of the following is NOT mentioned in the passage?", options: ["Life today is better and healthier than life in the past", "The McMillan family changed their forms of entertainment in their experiment", "Trey and Denton were very hooked on modern technology", "Many parents nowadays share the same concern as the McMillans"], ans: "Life today is better and healthier than life in the past" }
+             ,
+             { q: "Question 39: Which of the following can be inferred from the passage?", options: ["Blair was crazy about a life dominated by modern technology", "Life with lots of electronic gadgets might make the McMillans quite stressful", "Morgan attributed the success of her family’s experiment to Blair’s willingness", ""], ans: "Life with lots of electronic gadgets might make the McMillans quite stressful" }
+            ]
+        },
+        // Dạng 4: Ngữ pháp môi trường (Ảnh 4)
+        {
+            type: "Grammar Cloze",
+            passage: "We need to attend to the tree loss because of the following tree benefits. Firstly, trees provide shade for homes, office buildings, parks and roadways, cooling surface temperatures. They also take in and evaporate water, (40) _____ cools the air around them. Secondly, trees absorb carbon and remove pollutants from the atmosphere. Trees also reduce energy costs by $4 billion a year, according to Nowak's study. The shading of those trees on buildings (41) _____ your air conditioning costs. Take those trees away; now your buildings are heating up, you're running your air conditioning more, and you're burning more fuel from the power plants, so the pollution and emissions go up. (42) _____, trees act as water filters, taking in dirty surface water and absorbing nitrogen and phosphorus into the soil. Last but not least, (43) _____ studies have found connections between exposure to nature and better mental and physical health. Some hospitals have added tree views and plantings for patients as a result of these studies. Doctors are even prescribing walks in nature for children and families due to evidence that nature exposure lowers blood (44) _____ and stress hormones. And studies have associated living near green areas with lower death rates. ",
+            questions: [
+                { q: "Select the word for blank (40):", options: ["which", "whose", "that", "what"], ans: "which" }
+                ,
+                 { q: "Select the word for blank (41):", options: ["reduces", "increases", "pays", "values"], ans: "reduces" }
+                 ,
+                  { q: "Select the word for blank (42):", options: ["However", "Consequently", "Besides", "Afterwards"], ans: "Besides" }
+                  ,
+                   { q: "Select the word for blank (43):", options: ["much", "every", "each", "many"], ans: "many" }
+                   ,
+                    { q: "Select the word for blank (44):", options: ["stream", "pressure", "line", "drop"], ans: "pressure" }
+                    ,
+            ]
+        },
+        {
+            type: "Grammar Cloze",
+            passage: "Unlike a traditional billboard (45) _____ can only show one printed image, a digital billboard can change between different messages. Digital billboards are also considered more attractive than traditional ones, and people are more likely to (46) _____ them. Moreover, they can also be updated in real time. Nowadays, digital billboards are common in (47) _____ big cities around the worldIt is hard to imagine places like Times Square in New York, Piccadilly Circus in London, or Shibuya in Tokyo without bright light adverts. (48) _____ they are growing in popularity, there have been concerns about their impact on the surrounding environment. Global light pollution is increasing each year. The constant light emitted by digital billboards often (49) _____ birds, harms insects, and causes health problems in humans, too. ",
+            questions: [
+                { q: "Select the word for blank (45):", options: ["which", "whose", "where", "who "], ans: "which" }
+                ,
+                 { q: "Select the word for blank (46):", options: ["promote", "update", "distribute", "notice"], ans: "notice" }
+                 ,
+                  { q: "Select the word for blank (47):", options: ["each", "many", "every", "a little"], ans: "many" }
+                  ,
+                   { q: "Select the word for blank (48):", options: ["However", "Because", "Although", "Therefore"], ans: "Although" }
+                   ,
+                    { q: "Select the word for blank (49):", options: ["catches", "faces", "confuses", "maintains"], ans: "confuses" }
+                    ,
+            ]
+        },
+         {
+            type: "Grammar Cloze",
+            passage: "ChatGPT: New AI chatbot has everyone talking to it A new chatbot has passed one million users in less than a week, the project behind it says. ChatGPT was publicly released on Wednesday by OpenAI, an artificial intelligence research firm (50)_____ founders included Elon Musk. ChatGPT is the latest in a series of AIs which the firm refers to as GPTs, an acronym which (51) _____ for Generative Pre-Trained Transformer. To develop the system, an early version was fine-tuned through conversations with human trainers. The system also learned from access to Twitter data according to a tweet from Elon Musk who is no longer part of OpenAI's board. The Twitter boss wrote that he had paused access for now. The results have impressed (52) _____ who've tried out the chatbot. OpenAI chief executive Sam Altman revealed the level of interest in the artificial conversationalist in a tweet. The project says the chat format allows the AI to answer follow-up questions, admit its mistakes, challenge incorrect premises and reject inappropriate requests A journalist for technology news site Mashable who tried out ChatGPT reported it is hard to provoke the model into saying offensive things. (53) _____, OpenAI warns that ChatGPT sometimes writes plausible-sounding but incorrect or nonsensical answers. Training the model to be more cautious, says the firm, causes it to decline to answer questions that it can answer correctly. Briefly questioned by the BBC for this article, ChatGPT revealed itself to be a cautious interviewee (54) _____ of expressing itself clearly and accurately in English. ",
+            questions: [
+                { q: "Select the word for blank (50):", options: ["where", "which", "who", "whose"], ans: "whose" }
+                ,
+                 { q: "Select the word for blank (51):", options: ["care", "take", "stand", "look"], ans: "stand" }
+                 ,
+                  { q: "Select the word for blank (52):", options: ["little", "few", "much", "many"], ans: "many" }
+                  ,
+                   { q: "Select the word for blank (53):", options: ["As a result", "Therefore", "However", "So"], ans: "However" }
+                   ,
+                    { q: "Select the word for blank (54):", options: ["afraid", "fond", "able", "capable"], ans: "capable" }
+                    ,
+            ]
+        },
+    ];
+
+    let flatQuestions = [];
+    database.forEach(cat => {
+        cat.questions.forEach(q => {
+            flatQuestions.push({ ...q, type: cat.type, passage: cat.passage });
+        });
+    });
+
+    let currentIndex = 0;
+    let score = 0;
+    let seconds = 0;
+    let timerInterval;
+    let wrongQueue = [];
+
+    function shuffle(array) {
+        return array.sort(() => Math.random() - 0.5);
+    }
+
+    function startTimer() {
+        timerInterval = setInterval(() => {
+            seconds++;
+            const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
+            const secs = String(seconds % 60).padStart(2, '0');
+            document.getElementById('time-display').innerText = `${mins}:${secs}`;
+        }, 1000);
+    }
+
+    function renderQuestion() {
+        const pool = flatQuestions.length > 0 ? flatQuestions : wrongQueue;
+        
+        if (pool.length === 0) {
+            finishQuiz();
+            return;
+        }
+
+        const current = pool[0];
+        document.getElementById('category').innerText = current.type;
+        document.getElementById('passage-container').innerHTML = current.passage;
+        document.getElementById('question-text').innerText = current.q;
+        document.getElementById('q-progress').innerText = `${currentIndex + 1}/${flatQuestions.length + wrongQueue.length}`;
+        
+        const optionsArea = document.getElementById('options-area');
+        optionsArea.innerHTML = '';
+        
+        // Đảo lộn vị trí đáp án
+        const shuffledOpts = shuffle([...current.options]);
+        
+        shuffledOpts.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'opt-btn';
+            btn.innerText = opt;
+            btn.onclick = () => handleSelect(opt, btn, current);
+            optionsArea.appendChild(btn);
+        });
+    }
+
+    function handleSelect(choice, btn, data) {
+        const allBtns = document.querySelectorAll('.opt-btn');
+        allBtns.forEach(b => b.disabled = true);
+
+        if (choice === data.ans) {
+            btn.classList.add('correct');
+            score += 10;
+            document.getElementById('current-score').innerText = score;
+            setTimeout(() => {
+                if (flatQuestions.length > 0) flatQuestions.shift();
+                else wrongQueue.shift();
+                currentIndex++;
+                renderQuestion();
+            }, 1000);
+        } else {
+            btn.classList.add('wrong');
+            // Hiện đáp án đúng
+            Array.from(allBtns).find(b => b.innerText === data.ans).classList.add('correct');
+            
+            setTimeout(() => {
+                const failed = flatQuestions.length > 0 ? flatQuestions.shift() : wrongQueue.shift();
+                wrongQueue.push(failed); // Đẩy xuống cuối
+                renderQuestion();
+            }, 2000);
+        }
+    }
+
+    function finishQuiz() {
+        clearInterval(timerInterval);
+        document.getElementById('quiz-area').classList.add('hidden');
+        document.getElementById('result-screen').classList.remove('hidden');
+        document.getElementById('final-stats').innerText = `Tổng điểm: ${score} | Thời gian: ${document.getElementById('time-display').innerText}`;
+    }
+startTimer();
+    renderQuestion();
+</script>
+
+</body>
+</html>
