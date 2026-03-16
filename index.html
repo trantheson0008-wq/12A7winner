@@ -85,15 +85,21 @@
         <p>Hôm nay chúng ta sẽ chinh phục môn học nào đây?</p>
     </div>
     
-    <div class="subject-grid">
-        <div class="subject-card" onclick="showPage('quiz-english')">
-            <div class="subject-icon">🇬🇧</div>
-            <h3>Tiếng Anh</h3>
-            <p>Ôn tập GKII: Cloze Test, Reading, Grammar...</p>
-            <span class="status-tag">Sẵn sàng</span>
-            <a href="tienganh.html"></a>
-        </div>
-        
+   <div class="subject-card locked">
+    <div class="subject-icon">🇬🇧</div>
+    <h3>Tiếng Anh</h3>
+    <p>Ôn tập đề cương Giữa kỳ II: Cloze Test, Grammar...</p>
+    <span class="status-tag">Đã quá hạn thời gian truy cập</span>
+    </div>
+</div>
+
+ <div class="subject-card" onclick="toggleMenu('history-menu')">
+    <div class="subject-icon">📜</div>
+    <h3>Lịch sử 12</h3>
+    <p>Giữa kỳ II & Cuối kỳ II & Ôn thi tốt nghiệp</p>
+    <span class="status-tag">Chọn bài tập</span>
+</div>
+
         <div class="subject-card locked">
             <div class="subject-icon">📐</div>
             <h3>Toán học</h3>
@@ -102,7 +108,7 @@
         </div>
     </div>
 </div>
-<h3><center>NẾU KHÔNG HIỆN LINK LÀM THÌ TRUY CẬP VÀO THANH ĐIỀU HƯỚNG VÀ CHỌN MÔN TIẾNG ANH</center></h3>
+
 
 <script>
   function showPage(pageId) {
@@ -156,5 +162,122 @@ document.getElementById('password-input')?.addEventListener('keypress', function
     }
 });
 </script>
+<div id="history-menu" class="modal-overlay" onclick="closeMenu(event)">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <div class="modal-header">
+            <h2>📜 Chuyên mục Lịch sử 12</h2>
+            <button class="close-btn" onclick="toggleMenu('history-menu')">&times;</button>
+        </div>
+        
+        <div class="semester-section">
+            <h3>📂 Ôn tập Giữa học kỳ II</h3>
+            <div class="quiz-links">
+                <a href="https://azota.vn/de-thi/phgkvb" class="quiz-item"><span>📝</span> Bài số 12</a>
+                <a href="https://azota.vn/de-thi/pku3t9" class="quiz-item"><span>📝</span> Bài số 13</a>
+                <a href="https://azota.vn/de-thi/pku3t9" class="quiz-item"><span>📝</span> Bài số 14</a>
+                <a href="https://azota.vn/de-thi/c1wyhy" class="quiz-item"><span>📝</span> Đúng sai gkII</a>
+                <a href="#" class="quiz-item locked"><span>📝</span> Bài tập nâng cao gkII(Đang cập nhật...)</a>
+            </div>
+        </div>
+
+        <div class="semester-section">
+            <h3>📂 Ôn tập Cuối học kỳ II</h3>
+            <div class="quiz-links">
+                <a href="#" class="quiz-item locked"><span>🔒</span> Bài số 15</a>
+                <a href="#" class="quiz-item locked"><span>🔒</span> Bài số 16</a>
+                 <a href="#" class="quiz-item locked"><span>🔒</span>Đề tốt nghiệp lần thứ 1 </a>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function toggleMenu(menuId) {
+    const menu = document.getElementById(menuId);
+    const isVisible = menu.style.display === 'block';
+    menu.style.display = isVisible ? 'none' : 'block';
+}
+
+// Hàm đóng menu khi bấm ra ngoài vùng trắng
+function closeMenu(event) {
+    if (event.target.classList.contains('modal-overlay')) {
+        event.target.style.display = 'none';
+    }
+}
+</script>
+<style>
+    /* Giao diện Menu lựa chọn */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0; left: 0; width: 100%; height: 100%;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(5px);
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    width: 90%;
+    max-width: 500px;
+    margin: 10% auto;
+    padding: 25px;
+    border-radius: 20px;
+    animation: slideIn 0.3s ease-out;
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #f1f1f1;
+    padding-bottom: 10px;
+}
+
+.semester-section h3 {
+    color: #b91c1c;
+    font-size: 1.1rem;
+    margin-top: 20px;
+}
+
+.quiz-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.quiz-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 15px;
+    background: #f8fafc;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #334155;
+    font-weight: 500;
+    transition: 0.2s;
+}
+
+.quiz-item:hover {
+    background: #fee2e2;
+    transform: translateX(5px);
+}
+
+.quiz-item.locked {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+}
+
+@keyframes slideIn {
+    from { transform: translateY(-20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+.close-btn {
+    background: none; border: none; font-size: 2rem; cursor: pointer; color: #64748b;
+}
+</style>
 </body>
 </html>

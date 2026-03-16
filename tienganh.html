@@ -5,60 +5,46 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>English Midterm - Exam Mode</title>
     <style>
-    
-
-/* Đảm bảo container chính luôn đẹp */
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-}
-        :root { --primary: #3b82f6; --success: #22c55e; --error: #ef4444; --bg: #f8fafc; }
+    :root { --primary: #2563eb; --success: #16a34a; --error: #dc2626; --bg: #f8fafc; }
         body { font-family: 'Segoe UI', Tahoma, sans-serif; background: var(--bg); margin: 0; padding: 20px; }
         .container { max-width: 900px; margin: 0 auto; background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); }
         .header { display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #e2e8f0; padding-bottom: 15px; margin-bottom: 20px; }
         .timer { font-size: 1.2rem; font-weight: bold; color: var(--primary); }
-        .score { font-size: 1.1rem; font-weight: 600; color: #64748b; }
-        .passage-box { background: #f1f5f9; border-left: 5px solid var(--primary); padding: 20px; border-radius: 8px; margin-bottom: 20px; line-height: 1.8; }
-        .option-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 20px; }
+        .score-box { font-weight: 600; color: #1e40af; }
+        .passage-box { background: #eff6ff; border-left: 5px solid var(--primary); padding: 20px; border-radius: 8px; margin-bottom: 20px; line-height: 1.8; }
+        .question-text { font-size: 1.1rem; font-weight: bold; margin-bottom: 20px; color: #1e293b; }
+        .options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .opt-btn { padding: 15px; border: 2px solid #e2e8f0; border-radius: 10px; background: white; cursor: pointer; transition: 0.2s; text-align: left; font-size: 1rem; }
         .opt-btn:hover { border-color: var(--primary); background: #f0f7ff; }
         .correct { background: var(--success) !important; color: white; border-color: var(--success); }
         .wrong { background: var(--error) !important; color: white; border-color: var(--error); }
+        .nav-btn { padding: 10px 20px; background: #64748b; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        .hidden { display: none; }
 
-        .category-tag { background: #dbeafe; color: #1e40af; padding: 5px 12px; border-radius: 20px; font-size: 0.8rem; text-transform: uppercase; font-weight: bold; }
+
     </style>
 </head>
 <body>
-
-    
-    <div id="quiz-area"></div>
-    
-    <div class="controls">
-        <button onclick="prevQuestion()">Câu trước</button>
-        <button onclick="nextQuestion()">Câu sau</button>
-    </div>
-</div>
 <div class="container">
     <div class="header">
         <div>
-            <span class="category-tag" id="category">Loading...</span>
-            <div class="score">Điểm: <span id="current-score">0</span> | Câu: <span id="q-progress">0/0</span></div>
+            <button class="nav-btn" onclick="window.location.href='index.html'">🏠 Thoát</button>
+            <span class="score-box" style="margin-left:15px;">Điểm: <span id="score">0</span> | Câu: <span id="progress">0/0</span></span>
         </div>
-        <div class="timer">⏱ <span id="time-display">00:00</span></div>
+        <div class="timer">⏱ <span id="time">00:00</span></div>
     </div>
 
-    <div id="quiz-area">
+   <div id="quiz-area">
         <div id="passage-container" class="passage-box"></div>
-        <h3 id="question-text"></h3>
-        <div id="options-area" class="option-grid"></div>
+        <div id="question-container" class="question-text"></div>
+        <div id="options-container" class="options-grid"></div>
     </div>
 
     <div id="result-screen" class="hidden" style="text-align: center;">
         <h1 style="font-size: 3rem;">🎉</h1>
-        <h2>Hoàn thành bài ôn tập!</h2>
+        <h2>Hoàn thành ôn tập Tiếng Anh!</h2>
         <p id="final-stats"></p>
-        <button onclick="location.reload()" style="padding: 12px 25px; cursor: pointer; background: var(--primary); color: white; border: none; border-radius: 5px;">Làm lại bài mới</button>
+        <button onclick="location.reload()" style="padding: 12px 25px; cursor: pointer; background: var(--primary); color: white; border: none; border-radius: 8px;">Làm lại bài mới</button>
     </div>
 </div>
 
@@ -264,12 +250,20 @@
         },
     ];
 
-    let flatQuestions = [];
-    database.forEach(cat => {
-        cat.questions.forEach(q => {
-            flatQuestions.push({ ...q, type: cat.type, passage: cat.passage });
+  let flatQuestions = [];
+    function prepareData() {
+        flatQuestions = []; // Reset lại để tránh trùng lặp
+        databaseEnglish.forEach(item => {
+            item.questions.forEach(q => {
+                flatQuestions.push({
+                    q: q.q,
+                    options: q.options,
+                    ans: q.ans,
+                    passage: item.passage
+                });
+            });
         });
-    });
+    }
 
     let currentIndex = 0;
     let score = 0;
@@ -277,45 +271,56 @@
     let timerInterval;
     let wrongQueue = [];
 
-    function shuffle(array) {
-        return array.sort(() => Math.random() - 0.5);
-    }
-
     function startTimer() {
+        if (timerInterval) clearInterval(timerInterval); // Xóa timer cũ nếu có
         timerInterval = setInterval(() => {
             seconds++;
             const mins = String(Math.floor(seconds / 60)).padStart(2, '0');
             const secs = String(seconds % 60).padStart(2, '0');
-            document.getElementById('time-display').innerText = `${mins}:${secs}`;
+            document.getElementById('time').innerText = `${mins}:${secs}`;
         }, 1000);
     }
 
     function renderQuestion() {
-        const pool = flatQuestions.length > 0 ? flatQuestions : wrongQueue;
-        
-        if (pool.length === 0) {
+        // Kiểm tra nếu dữ liệu trống
+        if (flatQuestions.length === 0) {
+            document.getElementById('question-container').innerText = "Đang tải dữ liệu hoặc dữ liệu trống...";
+            return;
+        }
+
+        const isMainPhase = currentIndex < flatQuestions.length;
+        const current = isMainPhase ? flatQuestions[currentIndex] : wrongQueue[0];
+
+        if (!current) {
             finishQuiz();
             return;
         }
 
-        const current = pool[0];
-        document.getElementById('category').innerText = current.type;
-        document.getElementById('passage-container').innerHTML = current.passage;
-        document.getElementById('question-text').innerText = current.q;
-        document.getElementById('q-progress').innerText = `${currentIndex + 1}/${flatQuestions.length + wrongQueue.length}`;
+        // Cập nhật tiến độ
+        const total = flatQuestions.length + (isMainPhase ? 0 : wrongQueue.length);
+        document.getElementById('progress').innerText = `${currentIndex + 1}/${flatQuestions.length}`;
+
+        // Hiển thị đoạn văn
+        const passageBox = document.getElementById('passage-container');
+        passageBox.innerHTML = current.passage;
+        passageBox.classList.remove('hidden');
+
+        // Hiển thị câu hỏi
+        document.getElementById('question-container').innerText = current.q;
+
+        // Hiển thị đáp án
+        const optionsCont = document.getElementById('options-container');
+        optionsCont.innerHTML = '';
         
-        const optionsArea = document.getElementById('options-area');
-        optionsArea.innerHTML = '';
+        // Trộn đáp án để tăng độ khó
+        const shuffled = [...current.options].sort(() => Math.random() - 0.5);
         
-        // Đảo lộn vị trí đáp án
-        const shuffledOpts = shuffle([...current.options]);
-        
-        shuffledOpts.forEach(opt => {
+        shuffled.forEach(opt => {
             const btn = document.createElement('button');
             btn.className = 'opt-btn';
             btn.innerText = opt;
             btn.onclick = () => handleSelect(opt, btn, current);
-            optionsArea.appendChild(btn);
+            optionsCont.appendChild(btn);
         });
     }
 
@@ -326,21 +331,20 @@
         if (choice === data.ans) {
             btn.classList.add('correct');
             score += 10;
-            document.getElementById('current-score').innerText = score;
+            document.getElementById('score').innerText = score;
             setTimeout(() => {
-                if (flatQuestions.length > 0) flatQuestions.shift();
+                if (currentIndex < flatQuestions.length) currentIndex++;
                 else wrongQueue.shift();
-                currentIndex++;
                 renderQuestion();
-            }, 1000);
+            }, 800);
         } else {
             btn.classList.add('wrong');
-            // Hiện đáp án đúng
+            // Hiển thị đáp án đúng
             Array.from(allBtns).find(b => b.innerText === data.ans).classList.add('correct');
-            
             setTimeout(() => {
-                const failed = flatQuestions.length > 0 ? flatQuestions.shift() : wrongQueue.shift();
-                wrongQueue.push(failed); // Đẩy xuống cuối
+                let failed = (currentIndex < flatQuestions.length) ? flatQuestions[currentIndex] : wrongQueue.shift();
+                if (currentIndex < flatQuestions.length) currentIndex++;
+                wrongQueue.push(failed); // Lưu câu sai để làm lại cuối buổi
                 renderQuestion();
             }, 2000);
         }
@@ -350,11 +354,17 @@
         clearInterval(timerInterval);
         document.getElementById('quiz-area').classList.add('hidden');
         document.getElementById('result-screen').classList.remove('hidden');
-        document.getElementById('final-stats').innerText = `Tổng điểm: ${score} | Thời gian: ${document.getElementById('time-display').innerText}`;
+        document.getElementById('final-stats').innerText = `Hoàn thành với ${score} điểm!`;
     }
-startTimer();
-    renderQuestion();
-</script>
+
+    // KHỞI CHẠY HỆ THỐNG
+    window.onload = () => {
+        prepareData();
+        startTimer();
+        renderQuestion();
+    };
+    </script>
+
 
 </body>
 </html>
