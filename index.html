@@ -91,7 +91,6 @@
     <p>Ôn tập đề cương Giữa kỳ II: Cloze Test, Grammar...</p>
     <span class="status-tag">Đã quá hạn thời gian truy cập</span>
     </div>
-</div>
 
  <div class="subject-card" onclick="toggleMenu('history-menu')">
     <div class="subject-icon">📜</div>
@@ -164,6 +163,7 @@ document.getElementById('password-input')?.addEventListener('keypress', function
 </script>
 <div id="history-menu" class="modal-overlay" onclick="closeMenu(event)">
     <div class="modal-content" onclick="event.stopPropagation()">
+        
         <div class="modal-header">
             <h2>📜 Chuyên mục Lịch sử 12</h2>
             <button class="close-btn" onclick="toggleMenu('history-menu')">&times;</button>
@@ -277,6 +277,46 @@ function closeMenu(event) {
 
 .close-btn {
     background: none; border: none; font-size: 2rem; cursor: pointer; color: #64748b;
+}
+</style>
+</div>
+<div class="update-banner">
+    <span class="pulse-icon"></span>
+    <p><b>Status:</b> Trang web của bọn mình đang trong quá trình phát triển, mong các bạn theo dõi web của bọn mình để nhận link ôn tập các môn nha.</p>
+</div>
+
+<style>
+.update-banner {
+    background: #fffbeb;
+    border: 1px solid #fef3c7;
+    padding: 10px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin: 15px auto;
+    max-width: 900px;
+}
+
+.update-banner p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #92400e;
+}
+
+.pulse-icon {
+    width: 10px;
+    height: 10px;
+    background: #f59e0b;
+    border-radius: 50%;
+    box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7);
+    animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
+    100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
 }
 </style>
 </body>
