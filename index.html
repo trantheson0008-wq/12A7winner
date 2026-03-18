@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Khu tự trị của 12A7</title>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
         /* Class để ẩn các trang không dùng tới */
 .hidden {
@@ -45,6 +46,18 @@
 .status-tag { display: inline-block; margin-top: 15px; padding: 5px 15px; border-radius: 15px; font-size: 0.8rem; background: #dcfce7; color: #166534; }
 .locked { opacity: 0.7; cursor: not-allowed; }
 .locked .status-tag { background: #f1f5f9; color: #64748b; }
+.quiz-item {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px;
+    border: 1px solid #e2e8f0;
+    margin-bottom: 8px;
+    border-radius: 12px;
+}
+.quiz-item b { font-size: 1rem; color: #1e293b; }
+.quiz-item small { color: #64748b; }
 
 .hidden { display: none !important; }
     </style>
@@ -106,6 +119,18 @@
             <span class="status-tag">Đang cập nhật</span>
         </div>
     </div>
+</div>
+<div class="subject-card" onclick="toggleMenu('tinhoc-menu')">
+    <div class="subject-icon">📜</div>
+    <h3>Tin học 12 </h3>
+    <p>Giữa kỳ II & Cuối kỳ II </p>
+    <span class="status-tag">Chọn bài tập</span>
+</div>
+<div class="subject-card" onclick="toggleMenu('congnghe-menu')">
+    <div class="subject-icon">📜</div>
+    <h3>Công nghệ 12</h3>
+    <p>Giữa kỳ II & Cuối kỳ II </p>
+    <span class="status-tag">Chọn bài tập</span>
 </div>
 
 
@@ -190,6 +215,102 @@ document.getElementById('password-input')?.addEventListener('keypress', function
         </div>
     </div>
 </div>
+
+   <div class="modal-header">
+            <h2>📜 Tin học 12</h2>
+            <button class="close-btn" onclick="toggleMenu('tinhoc-menu')">&times;</button>
+        </div>
+        
+        <div class="semester-section">
+            <h3>📂 Ôn tập Giữa học kỳ II</h3>
+           <div class="quiz-links">
+    <div class="quiz-item count-visit" data-id="tin-gk2" onclick="showPreview('tin-gk2')">
+        <span>📝</span> 
+        <div>
+            <b>Ôn giữa kì II</b>
+            <br><small>Lượt học: <span id="view-tin-gk2">0</span></small>
+        </div>
+    </div>
+</div>
+
+        <div class="semester-section">
+            <h3>📂 Ôn tập Cuối học kỳ II</h3>
+            <div class="quiz-links">
+                <a href="#" class="quiz-item locked"><span>🔒</span> Ôn tập cuối kì II (sắp có) </a>
+            </div>
+        </div>
+    </div>
+</div>
+   <div class="modal-header">
+            <h2>📜 Công nghệ 12</h2>
+            <button class="close-btn" onclick="toggleMenu('congnghe-menu')">&times;</button>
+        </div>
+        
+        <div class="semester-section">
+            <h3>📂 Ôn tập Giữa học kỳ II</h3>
+   <div class="quiz-links">
+    <div class="quiz-item count-visit" data-id="bai13-gk2" onclick="showPreview('bai13-gk2')">
+        <span>📝</span> 
+        <div>
+            <b>Bài 13 - Công nghệ</b>
+            <br><small>Lượt học: <span id="view-bai13-gk2">0</span></small>
+        </div>
+    </div>
+     <div class="quiz-links">
+    <div class="quiz-item count-visit" data-id="bai14-gk2" onclick="showPreview('bai14-gk2')">
+        <span>📝</span> 
+        <div>
+            <b>Bài 14 - Công nghệ</b>
+            <br><small>Lượt học: <span id="view-bai14-gk2">0</span></small>
+        </div>
+    </div>
+     <div class="quiz-links">
+    <div class="quiz-item count-visit" data-id="bai15-gk2" onclick="showPreview('bai15-gk2')">
+        <span>📝</span> 
+        <div>
+            <b>Bài 15 - Công nghệ</b>
+            <br><small>Lượt học: <span id="view-bai15-gk2">0</span></small>
+        </div>
+    </div>
+     <div class="quiz-links">
+    <div class="quiz-item count-visit" data-id="bai16-gk2" onclick="showPreview('bai16-gk2')">
+        <span>📝</span> 
+        <div>
+            <b>Bài 16 - Công nghệ</b>
+            <br><small>Lượt học: <span id="view-bai16-gk2">0</span></small>
+        </div>
+    </div>
+     <div class="quiz-links">
+    <div class="quiz-item count-visit" data-id="bai17-gk2" onclick="showPreview('bai17-gk2')">
+        <span>📝</span> 
+        <div>
+            <b>Bài 17 - Công nghệ</b>
+            <br><small>Lượt học: <span id="view-bai17-gk2">0</span></small>
+        </div>
+    </div>
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+            </div>
+        </div>
+
+        <div class="semester-section">
+            <h3>📂 Ôn tập Cuối học kỳ II</h3>
+            <div class="quiz-links">
+                <a href="#" class="quiz-item locked"><span>🔒</span> Sắp có</a>
+                <a href="#" class="quiz-item locked"><span>🔒</span> Sắp có</a>
+                 <a href="#" class="quiz-item locked"><span>🔒</span>Sắp có </a>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function toggleMenu(menuId) {
     const menu = document.getElementById(menuId);
@@ -202,6 +323,90 @@ function closeMenu(event) {
     if (event.target.classList.contains('modal-overlay')) {
         event.target.style.display = 'none';
     }
+}
+</script>
+<script>
+    function showPreview(quizId) {
+    // Cấu hình nội dung chi tiết cho từng bài
+    const quizData = {
+        'tin-gk2': {
+            title: 'Ôn tập Tin học 12 - Giữa kì II',
+            description: 'Nội dung: Ôn tập lý thuyết về sử dụng phần mềm Vs Code. <br> Bao gồm câu hỏi trắc nghiệm và Đúng/Sai.',
+            questions: '43 câu',
+            time: '10 phút',
+            link: 'https://azota.vn/de-thi/j2016x'
+            
+ 
+        },
+        'bai13-gk2': {
+            title: 'Bài 13 - Công nghệ',
+            description: 'Trọng tâm: Ôn tập lý thuyết để làm phần trắc nghiệm',
+            questions: 'trên 15 câu',
+            time: '20 phút',
+            link: 'https://azota.vn/de-thi/prctiy'
+        },
+          'bai14-gk2': {
+            title: 'Bài 14 - Công nghệ',
+            description: 'Trọng tâm: Ôn tập lý thuyết để làm phần trắc nghiệm',
+            questions: 'trên 15 câu',
+            time: '20 phút',
+            link: 'https://azota.vn/de-thi/jopmwp'
+        },
+          'bai15-gk2': {
+            title: 'Bài 15 - Công nghệ',
+            description: 'Trọng tâm: Ôn tập lý thuyết để làm phần trắc nghiệm',
+            questions: 'trên 15 câu',
+            time: '20 phút',
+            link: 'https://azota.vn/de-thi/nnxv6t'
+        },
+          'bai16-gk2': {
+            title: 'Bài 16 - Công nghệ',
+            description: 'Trọng tâm: Ôn tập lý thuyết để làm phần trắc nghiệm',
+            questions: 'trên 15 câu',
+            time: '20 phút',
+            link: 'https://azota.vn/de-thi/iax0wa'
+        },
+          'bai17-gk2': {
+            title: 'Bài 17 - Công nghệ',
+            description: 'Trọng tâm: Ôn tập lý thuyết để làm phần trắc nghiệm',
+            questions: 'trên 15 câu',
+            time: '20 phút',
+            link: 'https://azota.vn/de-thi/4dqpt8'
+        }
+    };
+    
+
+    const data = quizData[quizId];
+    const currentViews = localStorage.getItem('view_' + quizId) || 0;
+
+    // Hiển thị bảng thông báo đẹp mắt
+    Swal.fire({
+        title: `<strong>${data.title}</strong>`,
+        icon: 'info',
+        html: `
+            <div style="text-align: left; font-size: 0.95rem; line-height: 1.6;">
+                <p>${data.description}</p>
+                <hr>
+                <ul style="list-style: none; padding: 0;">
+                    <li>📍 <b>Số câu hỏi:</b> ${data.questions}</li>
+                    <li>⏱ <b>Thời gian dự kiến:</b> ${data.time}</li>
+                    <li>🔥 <b>Số người đã học:</b> ${currentViews} lượt</li>
+                </ul>
+            </div>
+        `,
+        showCancelButton: true,
+        confirmButtonText: '🚀 Bắt đầu học ngay',
+        cancelButtonText: 'Để sau',
+        confirmButtonColor: '#b91c1c', // Màu đỏ cho môn Sử
+        cancelButtonColor: '#64748b',
+        reverseButtons: true,
+        borderRadius: '15px'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            // Chỉ khi bấm "Bắt đầu" thì mới chuyển trang và tính lượt xem
+            window.location.href = data.link;
+        }
+    });
 }
 </script>
 <style>
@@ -318,6 +523,8 @@ function closeMenu(event) {
     70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(245, 158, 11, 0); }
     100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0); }
 }
+
 </style>
+
 </body>
 </html>
