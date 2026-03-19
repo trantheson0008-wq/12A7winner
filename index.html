@@ -224,15 +224,13 @@ document.getElementById('password-input')?.addEventListener('keypress', function
         <div class="semester-section">
             <h3>📂 Ôn tập Giữa học kỳ II</h3>
            <div class="quiz-links">
-    <div class="quiz-item count-visit" data-id="tin-gk2" onclick="showPreview('tin-gk2')">
-        <span>📝</span> 
-        <div>
-            <b>Ôn giữa kì II</b>
-            <br><small>Lượt học: <span id="view-tin-gk2">0</span></small>
-        </div>
+   <div class="quiz-item count-visit" data-id="tingk2" onclick="showPreview('tingk2')">
+    <span>📝</span>
+    <div>
+        <b>Ôn tập giữa kì II</b><br>
+        <small>Lượt học: <span id="view-tingk2">2</span></small>
     </div>
 </div>
-
         <div class="semester-section">
             <h3>📂 Ôn tập Cuối học kỳ II</h3>
             <div class="quiz-links">
@@ -249,45 +247,46 @@ document.getElementById('password-input')?.addEventListener('keypress', function
         <div class="semester-section">
             <h3>📂 Ôn tập Giữa học kỳ II</h3>
    <div class="quiz-links">
-    <div class="quiz-item count-visit" data-id="bai13-gk2" onclick="showPreview('bai13-gk2')">
-        <span>📝</span> 
-        <div>
-            <b>Bài 13 - Công nghệ</b>
-            <br><small>Lượt học: <span id="view-bai13-gk2">0</span></small>
-        </div>
+   <div class="quiz-item count-visit" data-id="bai13gk2" onclick="showPreview('bai13gk2')">
+    <span>📝</span>
+    <div>
+        <b>Bài 13 - Công nghệ</b><br>
+        <small>Lượt học: <span id="view-bai13gk2">2</span></small>
+    </div>
+</div>
+     <div class="quiz-links">
+   <div class="quiz-item count-visit" data-id="bai14gk2" onclick="showPreview('bai14gk2')">
+    <span>📝</span>
+    <div>
+        <b>Bài 14 - Công nghệ</b><br>
+        <small>Lượt học: <span id="view-bai14gk2">25</span></small>
+    </div>
+</div>
+     <div class="quiz-links">
+    <div class="quiz-item count-visit" data-id="bai15gk2" onclick="showPreview('bai15gk2')">
+    <span>📝</span>
+    <div>
+        <b>Bài 15 - Công nghệ</b><br>
+        <small>Lượt học: <span id="view-bai15gk2">23</span></small>
+    </div>
+</div>
     </div>
      <div class="quiz-links">
-    <div class="quiz-item count-visit" data-id="bai14-gk2" onclick="showPreview('bai14-gk2')">
-        <span>📝</span> 
-        <div>
-            <b>Bài 14 - Công nghệ</b>
-            <br><small>Lượt học: <span id="view-bai14-gk2">0</span></small>
-        </div>
+   <div class="quiz-item count-visit" data-id="bai16gk2" onclick="showPreview('bai16gk2')">
+    <span>📝</span>
+    <div>
+        <b>Bài 16 - Công nghệ</b><br>
+        <small>Lượt học: <span id="view-bai16gk2">19</span></small>
     </div>
+</div>
      <div class="quiz-links">
-    <div class="quiz-item count-visit" data-id="bai15-gk2" onclick="showPreview('bai15-gk2')">
-        <span>📝</span> 
-        <div>
-            <b>Bài 15 - Công nghệ</b>
-            <br><small>Lượt học: <span id="view-bai15-gk2">0</span></small>
-        </div>
+   <div class="quiz-item count-visit" data-id="bai17gk2" onclick="showPreview('bai17gk2')">
+    <span>📝</span>
+    <div>
+        <b>Bài 17 - Công nghệ</b><br>
+        <small>Lượt học: <span id="view-bai17gk2">17</span></small>
     </div>
-     <div class="quiz-links">
-    <div class="quiz-item count-visit" data-id="bai16-gk2" onclick="showPreview('bai16-gk2')">
-        <span>📝</span> 
-        <div>
-            <b>Bài 16 - Công nghệ</b>
-            <br><small>Lượt học: <span id="view-bai16-gk2">0</span></small>
-        </div>
-    </div>
-     <div class="quiz-links">
-    <div class="quiz-item count-visit" data-id="bai17-gk2" onclick="showPreview('bai17-gk2')">
-        <span>📝</span> 
-        <div>
-            <b>Bài 17 - Công nghệ</b>
-            <br><small>Lượt học: <span id="view-bai17-gk2">0</span></small>
-        </div>
-    </div>
+</div>
 </div>
 
 </div>
@@ -329,7 +328,7 @@ function closeMenu(event) {
     function showPreview(quizId) {
     // Cấu hình nội dung chi tiết cho từng bài
     const quizData = {
-        'tin-gk2': {
+        'tingk2': {
             title: 'Ôn tập Tin học 12 - Giữa kì II',
             description: 'Nội dung: Ôn tập lý thuyết về sử dụng phần mềm Vs Code. <br> Bao gồm câu hỏi trắc nghiệm và Đúng/Sai.',
             questions: '43 câu',
@@ -338,35 +337,35 @@ function closeMenu(event) {
             
  
         },
-        'bai13-gk2': {
+        'bai13gk2': {
             title: 'Bài 13 - Công nghệ',
             description: 'Trọng tâm: Ôn tập lý thuyết để làm phần trắc nghiệm',
             questions: 'trên 15 câu',
             time: '20 phút',
             link: 'https://azota.vn/de-thi/prctiy'
         },
-          'bai14-gk2': {
+          'bai14gk2': {
             title: 'Bài 14 - Công nghệ',
             description: 'Trọng tâm: Ôn tập lý thuyết để làm phần trắc nghiệm',
             questions: 'trên 15 câu',
             time: '20 phút',
             link: 'https://azota.vn/de-thi/jopmwp'
         },
-          'bai15-gk2': {
+          'bai15gk2': {
             title: 'Bài 15 - Công nghệ',
             description: 'Trọng tâm: Ôn tập lý thuyết để làm phần trắc nghiệm',
             questions: 'trên 15 câu',
             time: '20 phút',
             link: 'https://azota.vn/de-thi/nnxv6t'
         },
-          'bai16-gk2': {
+          'bai16gk2': {
             title: 'Bài 16 - Công nghệ',
             description: 'Trọng tâm: Ôn tập lý thuyết để làm phần trắc nghiệm',
             questions: 'trên 15 câu',
             time: '20 phút',
             link: 'https://azota.vn/de-thi/iax0wa'
         },
-          'bai17-gk2': {
+          'bai17gk2': {
             title: 'Bài 17 - Công nghệ',
             description: 'Trọng tâm: Ôn tập lý thuyết để làm phần trắc nghiệm',
             questions: 'trên 15 câu',
@@ -402,12 +401,20 @@ function closeMenu(event) {
         reverseButtons: true,
         borderRadius: '15px'
     }).then((result) => {
-        if (result.isConfirmed) {
-            // Chỉ khi bấm "Bắt đầu" thì mới chuyển trang và tính lượt xem
-            window.location.href = data.link;
-        }
-    });
-}
+       if (result.isConfirmed) {
+        // 1. Lấy ID của bài tập hiện tại
+        const id = quizId; 
+        
+        // 2. Thực hiện cộng dồn lượt học vào localStorage
+        let currentCount = parseInt(localStorage.getItem('view_' + id)) || 0;
+        currentCount++;
+        localStorage.setItem('view_' + id, currentCount);
+        
+        // 3. Chuyển trang đến bài học
+        window.location.href = data.link;
+    }
+});
+    }
 </script>
 <style>
     /* Giao diện Menu lựa chọn */
